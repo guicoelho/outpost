@@ -14,6 +14,7 @@ RUN apt-get update \
         ca-certificates \
         gnupg \
         software-properties-common \
+        postgresql-client \
     && add-apt-repository -y ppa:deadsnakes/ppa \
     && apt-get update \
     && apt-get install -y --no-install-recommends \

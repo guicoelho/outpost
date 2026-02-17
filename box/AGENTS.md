@@ -14,7 +14,7 @@ This box is served at **`BOX_DOMAIN_PLACEHOLDER`**. The domain is also available
 
 ## Available Tools
 
-Pre-installed: Node.js 20, Python 3.11, npm, pip, git, pm2, curl, wget, jq, build-essential.
+Pre-installed: Node.js 20, Python 3.11, npm, pip, git, pm2, curl, wget, jq, build-essential, psql (PostgreSQL client).
 
 ## Managed Tools
 
