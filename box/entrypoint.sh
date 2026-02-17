@@ -15,7 +15,8 @@ if [ -f /usr/local/share/ca-certificates/proxy/tools.json ]; then
     cp /usr/local/share/ca-certificates/proxy/tools.json /workspace/.tools.json
 fi
 
-sed -i "s/BOX_DOMAIN_PLACEHOLDER/${BOX_DOMAIN:-<your-domain>}/g" /etc/opencode/OUTPOST.md
+sed -i "s/BOX_DOMAIN_PLACEHOLDER/${BOX_DOMAIN:-<your-domain>}/g" /etc/opencode/AGENTS.md
+cp /etc/opencode/AGENTS.md /workspace/AGENTS.md
 
 caddy start --config /etc/caddy/Caddyfile --adapter caddyfile
 
