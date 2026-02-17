@@ -41,7 +41,7 @@ func NewHTTPServer(cfg *config.Config, ca *x509.Certificate, key *rsa.PrivateKey
 	p := goproxy.NewProxyHttpServer()
 	p.Verbose = false
 
-	p.OnRequest().HandleConnect(func(host string, ctx *goproxy.ProxyCtx) (*goproxy.ConnectAction, string) {
+	p.OnRequest().HandleConnect(goproxy.FuncHttpsHandler(func(host string, ctx *goproxy.ProxyCtx) (*goproxy.ConnectAction, string) {
 		destHost, destHostPort := normalizeDest(host, "https")
 
 		if isBlocked(destHost, destHostPort, cfg.Blocked) {
@@ -55,7 +55,7 @@ func NewHTTPServer(cfg *config.Config, ca *x509.Certificate, key *rsa.PrivateKey
 
 		logger.Printf("action=pass destination=%s", host)
 		return goproxy.OkConnect, host
-	})
+	}))
 
 	p.OnRequest().DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 		host, hostPort := requestDestination(req)
