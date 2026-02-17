@@ -1,0 +1,4 @@
+.env
+config.yml
+caddy_data/
+caddy_config/

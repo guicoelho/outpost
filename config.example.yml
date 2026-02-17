@@ -1,0 +1,42 @@
+# Per-user outbound proxy config.
+user: alice@corp.com
+
+managed_tools:
+  # GitHub API access with token injected by proxy.
+  - name: github
+    match: "*.github.com"
+    protocol: http
+    credentials:
+      source: static
+      header_name: "Authorization"
+      header_value: "Bearer ${GITHUB_TOKEN}"
+    policy:
+      methods: [GET, HEAD]
+      paths: ["/repos/myorg/**", "/user"]
+
+  # OpenAI API with org-level policy and rate limiting.
+  - name: openai
+    match: "api.openai.com"
+    protocol: http
+    credentials:
+      source: static
+      header_name: "Authorization"
+      header_value: "Bearer ${OPENAI_API_KEY}"
+    policy:
+      methods: [GET, POST]
+      paths: ["/v1/**"]
+      rate_limit: "200/hour"
+
+  # Example PostgreSQL managed tool. Agent connects locally to this port.
+  - name: salesdb
+    match: "salesdb.internal:5432"
+    protocol: postgres
+    local_port: 5432
+    credentials:
+      source: static
+      username: "${SALESDB_USER}"
+      password: "${SALESDB_PASSWORD}"
+
+blocked:
+  - "*.competitor.com"
+  - "*.malware-domain.net"

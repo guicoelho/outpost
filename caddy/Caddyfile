@@ -1,0 +1,13 @@
+{$BOX_DOMAIN} {
+    handle /oauth2/* {
+        reverse_proxy oauth2-proxy:4180
+    }
+
+    @protected not path /oauth2/*
+    forward_auth @protected oauth2-proxy:4180 {
+        uri /oauth2/auth
+        copy_headers X-Auth-Request-User X-Auth-Request-Email
+    }
+
+    reverse_proxy box:8080
+}
