@@ -49,9 +49,9 @@ External services (APIs, databases, etc.) are configured for this environment. R
 - **HTTP tools**: No auth headers needed. The proxy adds credentials transparently.
 - **PostgreSQL tools**: Connect using the `user`, `password`, `host`, and `port` from the manifest.
 
-## Creating and Exposing Web Apps
+## Publishing, Deploying, and Exposing Web Apps
 
-To expose a web application, create `/workspace/.boxapps.json` with an array of app definitions:
+To publish, deploy, or expose a web application, create or edit `/workspace/.boxapps.json` with an array of app definitions:
 
 ```json
 [
@@ -71,7 +71,9 @@ To expose a web application, create `/workspace/.boxapps.json` with an array of 
 | `port`  | Port the app listens on (number)                 |
 | `start` | Shell command to start the app                   |
 
-Apps are managed with pm2 and auto-routed by Caddy. Once registered, the app is accessible at:
+**How it works:** Apps are managed with pm2 and auto-routed by Caddy. The `.boxapps.json` file is watched with inotify — saving changes triggers automatic sync (restarts, adds, or removes apps). There is no separate deploy/publish command; writing to `.boxapps.json` IS the publish step.
+
+Once registered, the app is accessible at:
 
 ```
 https://$BOX_DOMAIN/apps/<name>/
@@ -79,10 +81,19 @@ https://$BOX_DOMAIN/apps/<name>/
 
 Always tell the user the full URL with the actual domain when you create or start an app. The `/apps/<name>` path prefix is stripped before the request reaches your app, so the app should serve from `/`.
 
-Useful commands:
-- `pm2 list` — see running apps
-- `pm2 logs <name>` — view app logs
+To add multiple apps, add multiple entries to the JSON array. To remove an app, remove its entry and save the file.
+
+### App Management Commands
+
+- `pm2 list` — see running apps and their status
+- `pm2 logs <name>` — view app logs (useful for debugging)
 - `pm2 restart <name>` — restart an app
+- `pm2 stop <name>` — stop an app
+- `pm2 delete <name>` — remove an app from pm2
+
+### .boxapps.state.json
+
+The file `/workspace/.boxapps.state.json` is auto-generated and tracks the last synced state. Do not edit it manually.
 
 ## Internet Access and Proxy
 

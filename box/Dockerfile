@@ -38,7 +38,7 @@ COPY Caddyfile /etc/caddy/Caddyfile
 COPY entrypoint.sh /entrypoint.sh
 COPY boxapps-sync.sh /usr/local/bin/boxapps-sync.sh
 COPY opencode.json /root/.config/opencode/opencode.json
-COPY OUTPOST.md /etc/opencode/OUTPOST.md
+COPY AGENTS.md /etc/opencode/AGENTS.md
 
 RUN chmod +x /entrypoint.sh /usr/local/bin/boxapps-sync.sh
 
