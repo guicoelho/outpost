@@ -13,6 +13,7 @@ RUN apt-get update \
         inotify-tools \
         ca-certificates \
         gnupg \
+        postgresql-client \
         software-properties-common \
     && add-apt-repository -y ppa:deadsnakes/ppa \
     && apt-get update \
