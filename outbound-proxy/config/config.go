@@ -20,6 +20,8 @@ type ManagedTool struct {
 	Match       string      `yaml:"match"`
 	Protocol    string      `yaml:"protocol"`
 	LocalPort   int         `yaml:"local_port"`
+	Description string      `yaml:"description"`
+	Database    string      `yaml:"database"`
 	Credentials Credentials `yaml:"credentials"`
 	Policy      Policy      `yaml:"policy"`
 }

@@ -30,13 +30,15 @@ RUN apt-get update \
     && if [ -x /root/.opencode/bin/opencode ]; then ln -sf /root/.opencode/bin/opencode /usr/local/bin/opencode; fi \
     && curl -fsSL "https://caddyserver.com/api/download?os=linux&arch=amd64" -o /usr/local/bin/caddy \
     && chmod +x /usr/local/bin/caddy \
-    && mkdir -p /etc/caddy /workspace \
+    && mkdir -p /etc/caddy /workspace /root/.config/opencode /etc/opencode \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 COPY Caddyfile /etc/caddy/Caddyfile
 COPY entrypoint.sh /entrypoint.sh
 COPY boxapps-sync.sh /usr/local/bin/boxapps-sync.sh
+COPY opencode.json /root/.config/opencode/opencode.json
+COPY OUTPOST.md /etc/opencode/OUTPOST.md
 
 RUN chmod +x /entrypoint.sh /usr/local/bin/boxapps-sync.sh
 

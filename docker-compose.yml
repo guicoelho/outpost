@@ -57,6 +57,8 @@ services:
       - workspace:/workspace
       - proxy_ca:/usr/local/share/ca-certificates/proxy:ro
     environment:
+      BOX_DOMAIN: ${BOX_DOMAIN}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
       HTTP_PROXY: http://outbound-proxy:3128
       HTTPS_PROXY: http://outbound-proxy:3128
       NO_PROXY: localhost,127.0.0.1

@@ -15,6 +15,7 @@ import (
 
 	"outbound-proxy/certs"
 	"outbound-proxy/config"
+	"outbound-proxy/manifest"
 	"outbound-proxy/proxy"
 )
 
@@ -33,6 +34,14 @@ func main() {
 	caCert, caKey, err := certs.EnsureCA()
 	if err != nil {
 		logger.Fatalf("ensure CA: %v", err)
+	}
+
+	if data, err := manifest.Generate(cfg); err != nil {
+		logger.Printf("action=warning component=manifest err=%v", err)
+	} else if err := os.WriteFile("/ca/tools.json", data, 0644); err != nil {
+		logger.Printf("action=warning component=manifest err=%v", err)
+	} else {
+		logger.Printf("action=ready component=manifest path=/ca/tools.json")
 	}
 
 	httpServer, err := proxy.NewHTTPServer(cfg, caCert, caKey, *httpAddr)
