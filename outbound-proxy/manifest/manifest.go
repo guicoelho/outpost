@@ -83,7 +83,7 @@ func postgresEntry(t config.ManagedTool) ToolEntry {
 	return ToolEntry{
 		Name:        t.Name,
 		Type:        "postgres",
-		Host:        "localhost",
+		Host:        "outbound-proxy",
 		Port:        localPort,
 		Database:    t.Database,
 		Scope:       "read-only",
