@@ -74,7 +74,7 @@ func httpEntry(t config.ManagedTool) ToolEntry {
 }
 
 func postgresEntry(t config.ManagedTool) ToolEntry {
-	host, port := parseHostPort(t.Match, 5432)
+	host, _ := parseHostPort(t.Match, 5432)
 	localPort := t.LocalPort
 	if localPort == 0 {
 		localPort = 5432

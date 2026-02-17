@@ -24,7 +24,10 @@ if [ -f /usr/local/share/ca-certificates/proxy/tools.json ]; then
     cp /usr/local/share/ca-certificates/proxy/tools.json /workspace/.tools.json
 fi
 
-sed -i "s/BOX_DOMAIN_PLACEHOLDER/${BOX_DOMAIN:-<your-domain>}/g" /etc/opencode/AGENTS.md
+agents_template=/etc/opencode/AGENTS.template.md
+agents_file=/workspace/AGENTS.md
+cp "$agents_template" "$agents_file"
+sed -i "s/BOX_DOMAIN_PLACEHOLDER/${BOX_DOMAIN:-<your-domain>}/g" "$agents_file"
 
 # Inline the tools manifest into AGENTS.md so the model sees available tools
 # directly in its instructions without needing to read a separate file.
@@ -36,10 +39,8 @@ else
 fi
 # Replace placeholder line with actual tools JSON content.
 # Using sed's 'r' command avoids issues with special characters in JSON.
-# Apply to /etc/opencode/AGENTS.md in-place (loaded via opencode.json instructions).
-sed -i -e "/TOOLS_JSON_PLACEHOLDER/{ r $tools_file" -e "d; }" /etc/opencode/AGENTS.md
-# Also copy to /workspace for context discovery.
-cp /etc/opencode/AGENTS.md /workspace/AGENTS.md
+# Apply to /workspace/AGENTS.md in-place (loaded via opencode.json instructions).
+sed -i -e "/TOOLS_JSON_PLACEHOLDER/{ r $tools_file" -e "d; }" "$agents_file"
 rm -f /tmp/empty-tools.json
 
 caddy start --config /etc/caddy/Caddyfile --adapter caddyfile
