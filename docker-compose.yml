@@ -9,6 +9,8 @@ services:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
+    environment:
+      BOX_DOMAIN: ${BOX_DOMAIN}
     depends_on:
       - oauth2-proxy
       - box
