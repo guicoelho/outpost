@@ -16,32 +16,12 @@ This box is served at **`BOX_DOMAIN_PLACEHOLDER`**. The domain is also available
 
 Pre-installed: Node.js 20, Python 3.11, npm, pip, git, pm2, curl, wget, jq, build-essential.
 
-## Managed Tools Discovery
+## Managed Tools
 
-External services (APIs, databases, etc.) are configured for this environment. Read `/workspace/.tools.json` to discover what's available. This file is a JSON array of tool entries, for example:
+You have access to external services (APIs, databases, etc.) configured for this environment. These are your managed tools:
 
 ```json
-[
-  {
-    "name": "GitHub",
-    "type": "http",
-    "base_url": "https://api.github.com",
-    "scope": "read-write",
-    "description": "GitHub API"
-  },
-  {
-    "name": "PostgreSQL",
-    "type": "postgres",
-    "host": "localhost",
-    "port": 5432,
-    "database": "app",
-    "scope": "read-write",
-    "connection": {
-      "user": "postgres",
-      "password": "postgres"
-    }
-  }
-]
+TOOLS_JSON_PLACEHOLDER
 ```
 
 **Credentials are injected automatically by the outbound proxy.** There are no API keys or tokens in the environment. Just make requests normally:
