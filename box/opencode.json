@@ -1,5 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "model": "anthropic/claude-opus-4-6",
-  "instructions": ["/etc/opencode/AGENTS.md"]
+  "instructions": ["/workspace/AGENTS.md"]
 }
