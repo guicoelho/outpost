@@ -14,5 +14,10 @@
         }
     }
 
-    reverse_proxy box:8080
+    reverse_proxy box:8080 {
+        transport http {
+            keepalive 30s
+            keepalive_idle_conns 10
+        }
+    }
 }
