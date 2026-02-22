@@ -1,3 +1,8 @@
 :8080 {
-    reverse_proxy localhost:7681
+    reverse_proxy localhost:7681 {
+        transport http {
+            keepalive 30s
+            keepalive_idle_conns 10
+        }
+    }
 }

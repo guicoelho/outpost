@@ -43,6 +43,12 @@ fi
 sed -i -e "/TOOLS_JSON_PLACEHOLDER/{ r $tools_file" -e "d; }" "$agents_file"
 rm -f /tmp/empty-tools.json
 
+# Persist OpenCode sessions across container rebuilds by symlinking its
+# data directory into the persistent /workspace volume.
+mkdir -p /workspace/.opencode-data
+mkdir -p /root/.local/share
+ln -sfn /workspace/.opencode-data /root/.local/share/opencode
+
 caddy start --config /etc/caddy/Caddyfile --adapter caddyfile
 
 if [ -f /workspace/.boxapps.json ]; then
@@ -58,4 +64,4 @@ fi
     done
 ) &
 
-exec ttyd -p 7681 -W opencode
+exec ttyd -p 7681 -W --ping-interval 30 opencode
