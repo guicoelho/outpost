@@ -1,5 +1,7 @@
 # Per-user outbound proxy config.
-user: alice@corp.com
+allowed_users:
+  - alice@corp.com
+  # - bob@corp.com   # uncomment to share this box
 
 managed_tools:
   # GitHub API access with token injected by proxy.
@@ -14,6 +16,19 @@ managed_tools:
     policy:
       methods: [GET, HEAD]
       paths: ["/repos/myorg/**", "/user"]
+
+  # Anthropic API — key injected by proxy so the box stays credential-free.
+  - name: anthropic
+    match: "api.anthropic.com"
+    protocol: http
+    description: "Anthropic API"
+    credentials:
+      source: static
+      header_name: "x-api-key"
+      header_value: "${ANTHROPIC_API_KEY}"
+    policy:
+      methods: [GET, POST]
+      paths: ["/v1/**"]
 
   # OpenAI API with org-level policy and rate limiting.
   - name: openai

@@ -1,12 +1,15 @@
 services:
   caddy:
     image: caddy:2.11-alpine
+    entrypoint: ["/entrypoint.sh"]
     ports:
       - "80:80"
       - "443:443"
       - "443:443/udp"
     volumes:
-      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy/Caddyfile.tmpl:/etc/caddy/Caddyfile.tmpl:ro
+      - ./caddy/entrypoint.sh:/entrypoint.sh:ro
+      - ./config.yml:/etc/box/config.yml:ro
       - caddy_data:/data
       - caddy_config:/config
     environment:
@@ -19,6 +22,8 @@ services:
 
   oauth2-proxy:
     image: quay.io/oauth2-proxy/oauth2-proxy:v7.14.2
+    volumes:
+      - ./oauth2-proxy/templates:/custom-templates:ro
     environment:
       OAUTH2_PROXY_PROVIDER: google
       OAUTH2_PROXY_CLIENT_ID: ${GOOGLE_CLIENT_ID}
@@ -31,6 +36,7 @@ services:
       OAUTH2_PROXY_COOKIE_SECURE: "true"
       OAUTH2_PROXY_SET_XAUTHREQUEST: "true"
       OAUTH2_PROXY_WHITELIST_DOMAINS: "${BOX_DOMAIN}"
+      OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR: "/custom-templates"
     networks:
       - public
 
@@ -59,7 +65,7 @@ services:
       - proxy_ca:/usr/local/share/ca-certificates/proxy:ro
     environment:
       BOX_DOMAIN: ${BOX_DOMAIN}
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      ANTHROPIC_API_KEY: "sk-proxy-injected" # Dummy value; real key is injected by outbound-proxy via MITM.
       HTTP_PROXY: http://outbound-proxy:3128
       HTTPS_PROXY: http://outbound-proxy:3128
       NO_PROXY: localhost,127.0.0.1

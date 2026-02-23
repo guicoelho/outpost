@@ -9,7 +9,7 @@ import (
 
 // Config is the root YAML schema loaded by the proxy.
 type Config struct {
-	User         string        `yaml:"user"`
+	AllowedUsers []string      `yaml:"allowed_users"`
 	ManagedTools []ManagedTool `yaml:"managed_tools"`
 	Blocked      []string      `yaml:"blocked"`
 }

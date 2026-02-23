@@ -55,7 +55,9 @@ jobs:
           cp docker-compose.prod.yml release/docker-compose.yml
           cp .env.example release/.env.example
           cp config.example.yml release/config.example.yml
-          cp caddy/Caddyfile release/Caddyfile
+          cp caddy/Caddyfile.tmpl release/Caddyfile.tmpl
+          cp caddy/entrypoint.sh release/caddy-entrypoint.sh
+          cp oauth2-proxy/templates/sign_in.html release/sign_in.html
           cp install.sh release/install.sh
 
       - uses: softprops/action-gh-release@v2
@@ -65,5 +67,7 @@ jobs:
             release/docker-compose.yml
             release/.env.example
             release/config.example.yml
-            release/Caddyfile
+            release/Caddyfile.tmpl
+            release/caddy-entrypoint.sh
+            release/sign_in.html
             release/install.sh

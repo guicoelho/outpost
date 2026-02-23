@@ -133,7 +133,8 @@ The outbound proxy is configured via `config.yml` (mounted read-only into the co
 ### Example `config.yml`
 
 ```yaml
-user: alice
+allowed_users:
+  - alice@corp.com
 
 managed_tools:
   - name: github
@@ -181,7 +182,7 @@ blocked:
 
 | Field           | Description                              |
 |-----------------|------------------------------------------|
-| `user`          | Username label (for logging)             |
+| `allowed_users` | List of email addresses allowed to access this box (opencode). Apps at `/apps/*` remain accessible to all authenticated org users. |
 | `managed_tools` | List of services to inject credentials   |
 | `blocked`       | List of glob patterns to block           |
 
@@ -257,13 +258,16 @@ Apps survive container restarts (pm2 restores them from the manifest on boot).
 - Listens on ports 80 and 443
 - Auto-provisions TLS certificates via Let's Encrypt
 - Routes `/oauth2/*` to oauth2-proxy
-- All other requests go through `forward_auth` (oauth2-proxy validates the session) then proxy to the box on port 8080
+- All other requests go through `forward_auth` (oauth2-proxy validates the session)
+- Non-`/apps/*` paths are further restricted to `allowed_users` from `config.yml`
+- Proxies authenticated requests to the box on port 8080
 
 ### oauth2-proxy
 
 - Google OAuth 2.0 provider
-- Restricts access to the configured email domain
+- Restricts access to the configured email domain (org-wide gate for `/apps/*`)
 - Sets `X-Auth-Request-User` and `X-Auth-Request-Email` headers on authenticated requests
+- Caddy additionally enforces `allowed_users` from `config.yml` for non-app paths (opencode terminal)
 
 ### Box
 
