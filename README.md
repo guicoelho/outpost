@@ -41,7 +41,33 @@ The box can only reach the internet through the outbound proxy on the `isolated`
 - A Google Cloud OAuth 2.0 client (for SSO)
 - API keys for the services you want to broker (GitHub, OpenAI, Anthropic, etc.)
 
-## Quick Start
+## Quick Start (Pre-built)
+
+Run the install script to download pre-built images from GHCR:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/guicoelho/outpost/main/install.sh | bash
+```
+
+Or install a specific version:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/guicoelho/outpost/main/install.sh | bash -s -- --version v0.0.1
+```
+
+Then edit `outpost/.env` and `outpost/config.yml` with your values and start:
+
+```bash
+cd outpost && docker compose up -d
+```
+
+To update an existing installation:
+
+```bash
+cd outpost && bash install.sh --update
+```
+
+## Quick Start (From Source)
 
 ### 1. Clone and configure environment variables
 
