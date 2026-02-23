@@ -43,6 +43,10 @@ fi
 sed -i -e "/TOOLS_JSON_PLACEHOLDER/{ r $tools_file" -e "d; }" "$agents_file"
 rm -f /tmp/empty-tools.json
 
+# Create persistent data directory for app databases (SQLite, etc.)
+mkdir -p /workspace/.data
+export DATA_DIR=/workspace/.data
+
 # Persist OpenCode sessions across container rebuilds by symlinking its
 # data directory into the persistent /workspace volume.
 mkdir -p /workspace/.opencode-data

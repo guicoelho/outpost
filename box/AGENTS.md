@@ -21,6 +21,22 @@ Unless the user specifies otherwise, use the following stack when building web a
 - **Styling**: Tailwind CSS
 - **Components**: shadcn/ui
 
+### SQLite Database Persistence
+
+SQLite database files **must** be stored inside the persistent data directory to survive container rebuilds. The `$DATA_DIR` environment variable (set to `/workspace/.data`) is pre-created for this purpose:
+
+```ts
+import Database from 'better-sqlite3';
+import path from 'path';
+
+const DB_PATH = path.join(process.env.DATA_DIR || '/workspace/.data', 'myapp.db');
+const db = new Database(DB_PATH);
+```
+
+- Always store database files in `$DATA_DIR` (pre-created at `/workspace/.data`).
+- Use `CREATE TABLE IF NOT EXISTS` — never drop and recreate tables on startup.
+- Never use in-memory databases (`:memory:`) for data that should persist.
+
 ## Available Tools
 
 Pre-installed: Node.js 20, Python 3.11, npm, pip, git, pm2, curl, wget, jq, build-essential, psql (PostgreSQL client).
