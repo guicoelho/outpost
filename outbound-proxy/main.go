@@ -81,7 +81,7 @@ func main() {
 		logger.Printf("action=start component=postgres-proxy tool=%s listen=%s target=%s", tool.Name, listenAddr, tool.Match)
 	}
 
-	logger.Printf("action=ready user=%s managed_tools=%d blocked_rules=%d", cfg.User, len(cfg.ManagedTools), len(cfg.Blocked))
+	logger.Printf("action=ready allowed_users=%v managed_tools=%d blocked_rules=%d", cfg.AllowedUsers, len(cfg.ManagedTools), len(cfg.Blocked))
 
 	select {
 	case <-ctx.Done():

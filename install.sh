@@ -66,8 +66,12 @@ if $UPDATE; then
   VERSION=$(resolve_version)
   echo "Updating Outpost to ${VERSION} in ${DIR}..."
 
-  download "$VERSION" docker-compose.yml "$DIR/docker-compose.yml"
-  download "$VERSION" Caddyfile         "$DIR/caddy/Caddyfile"
+  download "$VERSION" docker-compose.yml      "$DIR/docker-compose.yml"
+  download "$VERSION" Caddyfile.tmpl           "$DIR/Caddyfile.tmpl"
+  download "$VERSION" caddy-entrypoint.sh      "$DIR/caddy-entrypoint.sh"
+  chmod +x "$DIR/caddy-entrypoint.sh"
+  mkdir -p "$DIR/oauth2-proxy/templates"
+  download "$VERSION" sign_in.html             "$DIR/oauth2-proxy/templates/sign_in.html"
 
   # Update OUTPOST_VERSION in .env
   if grep -q '^OUTPOST_VERSION=' "$DIR/.env"; then
@@ -90,12 +94,14 @@ fi
 VERSION=$(resolve_version)
 echo "Installing Outpost ${VERSION} into ${DIR}..."
 
-mkdir -p "$DIR/caddy"
-
-download "$VERSION" docker-compose.yml  "$DIR/docker-compose.yml"
-download "$VERSION" .env.example        "$DIR/.env.example"
-download "$VERSION" config.example.yml  "$DIR/config.example.yml"
-download "$VERSION" Caddyfile           "$DIR/caddy/Caddyfile"
+download "$VERSION" docker-compose.yml      "$DIR/docker-compose.yml"
+download "$VERSION" .env.example            "$DIR/.env.example"
+download "$VERSION" config.example.yml      "$DIR/config.example.yml"
+download "$VERSION" Caddyfile.tmpl           "$DIR/Caddyfile.tmpl"
+download "$VERSION" caddy-entrypoint.sh      "$DIR/caddy-entrypoint.sh"
+chmod +x "$DIR/caddy-entrypoint.sh"
+mkdir -p "$DIR/oauth2-proxy/templates"
+download "$VERSION" sign_in.html             "$DIR/oauth2-proxy/templates/sign_in.html"
 
 # Generate .env from template
 cp "$DIR/.env.example" "$DIR/.env"
