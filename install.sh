@@ -94,6 +94,8 @@ fi
 VERSION=$(resolve_version)
 echo "Installing Outpost ${VERSION} into ${DIR}..."
 
+mkdir -p "$DIR"
+
 download "$VERSION" docker-compose.yml      "$DIR/docker-compose.yml"
 download "$VERSION" .env.example            "$DIR/.env.example"
 download "$VERSION" config.example.yml      "$DIR/config.example.yml"
