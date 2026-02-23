@@ -12,6 +12,15 @@ This box is served at **`BOX_DOMAIN_PLACEHOLDER`**. The domain is also available
 - Everything outside `/workspace` is ephemeral and will be lost on container rebuild.
 - System packages installed via `apt-get` do not survive rebuilds. Prefer installing tools under `/workspace` (e.g. npm local installs, pip with `--target`, static binaries).
 
+## Default Tech Stack
+
+Unless the user specifies otherwise, use the following stack when building web apps:
+
+- **Framework**: Next.js (App Router)
+- **Database**: SQLite (via `better-sqlite3`)
+- **Styling**: Tailwind CSS
+- **Components**: shadcn/ui
+
 ## Available Tools
 
 Pre-installed: Node.js 20, Python 3.11, npm, pip, git, pm2, curl, wget, jq, build-essential, psql (PostgreSQL client).
@@ -79,6 +88,44 @@ The file `/workspace/.boxapps.state.json` is auto-generated and tracks the last 
 
 All outbound traffic goes through an HTTP proxy (`HTTP_PROXY` / `HTTPS_PROXY` are already set). Most destinations work normally. Some may be blocked and return a 403 response.
 
+### Making HTTP Requests Through the Proxy
+
+The proxy intercepts outbound requests, matches them by destination, and injects credentials for managed tools automatically. However, **Node.js built-in `fetch` (undici) does NOT respect `HTTPS_PROXY` environment variables**, so requests made with `fetch()` will bypass the proxy and fail to get credentials injected.
+
+**Use `node-fetch` or `axios` instead** — both respect the proxy environment variables out of the box:
+
+```bash
+npm install node-fetch
+```
+
+```ts
+import fetch from 'node-fetch';
+const res = await fetch('https://api.example.com/data');
+```
+
+Alternatively, for quick scripts, `curl` always works since it respects the proxy:
+
+```bash
+curl https://api.example.com/data
+```
+
+**Python `requests`** also works correctly — it respects `HTTPS_PROXY` by default.
+
 ## TLS and Certificates
 
 The proxy CA certificate is pre-trusted in the system certificate store. `NODE_EXTRA_CA_CERTS` and `REQUESTS_CA_BUNDLE` are already configured. HTTPS requests work out of the box — no additional TLS configuration is needed.
+
+## Authenticated User
+
+Every HTTP request reaching your app includes headers set by the authentication proxy:
+
+- `X-Auth-Request-Email` — the logged-in user's email address (e.g. `alice@corp.com`)
+- `X-Auth-Request-User` — the logged-in user's username
+
+These headers are available on **server-side** request handlers only (they come from the reverse proxy, not the browser). Examples:
+
+**Next.js Server Component / Route Handler:**
+```ts
+import { headers } from 'next/headers';
+const email = (await headers()).get('x-auth-request-email');
+```
