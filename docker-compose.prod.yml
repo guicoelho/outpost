@@ -35,8 +35,7 @@ services:
       - public
 
   outbound-proxy:
-    build:
-      context: ./outbound-proxy
+    image: ghcr.io/guicoelho/outpost/outbound-proxy:${OUTPOST_VERSION:-latest}
     volumes:
       - ./config.yml:/etc/box/config.yml:ro
       - proxy_data:/data
@@ -52,8 +51,7 @@ services:
       - internet
 
   box:
-    build:
-      context: ./box
+    image: ghcr.io/guicoelho/outpost/box:${OUTPOST_VERSION:-latest}
     volumes:
       - workspace:/workspace
       - proxy_ca:/usr/local/share/ca-certificates/proxy:ro
