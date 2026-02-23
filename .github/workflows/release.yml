@@ -53,7 +53,7 @@ jobs:
         run: |
           mkdir -p release
           cp docker-compose.prod.yml release/docker-compose.yml
-          cp .env.example release/.env.example
+          cp .env.example release/env.example
           cp config.example.yml release/config.example.yml
           cp caddy/Caddyfile.tmpl release/Caddyfile.tmpl
           cp caddy/entrypoint.sh release/caddy-entrypoint.sh
@@ -65,7 +65,7 @@ jobs:
           generate_release_notes: true
           files: |
             release/docker-compose.yml
-            release/.env.example
+            release/env.example
             release/config.example.yml
             release/Caddyfile.tmpl
             release/caddy-entrypoint.sh
