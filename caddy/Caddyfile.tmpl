@@ -1,4 +1,6 @@
 {$BOX_DOMAIN} {
+    encode zstd gzip
+
     handle /oauth2/* {
         reverse_proxy oauth2-proxy:4180
     }
