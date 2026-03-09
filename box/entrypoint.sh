@@ -68,4 +68,7 @@ fi
     done
 ) &
 
-exec ttyd -p 7681 -W --ping-interval 30 opencode
+# Use tmux so all browser tabs share a single opencode session.
+# This prevents ttyd from spawning a new opencode process per connection.
+exec ttyd -p 7681 -W --ping-interval 30 \
+    tmux new-session -A -s main opencode

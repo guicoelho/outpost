@@ -19,6 +19,7 @@ RUN apt-get update \
         gnupg \
         software-properties-common \
         postgresql-client \
+        tmux \
     && add-apt-repository -y ppa:deadsnakes/ppa \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
