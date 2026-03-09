@@ -58,6 +58,10 @@ services:
 
   box:
     image: ghcr.io/guicoelho/outpost/box:${OUTPOST_VERSION:-latest}
+    deploy:
+      resources:
+        limits:
+          memory: 2g
     volumes:
       - workspace:/workspace
       - proxy_ca:/usr/local/share/ca-certificates/proxy:ro
